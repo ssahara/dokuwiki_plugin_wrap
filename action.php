@@ -19,9 +19,29 @@ class action_plugin_wrap extends DokuWiki_Action_Plugin {
      *
      * @author Andreas Gohr <andi@splitbrain.org>
      */
-    function register(Doku_Event_Handler $controller){
+    function register(Doku_Event_Handler $controller) {
+        $controller->register_hook('PARSER_HANDLER_DONE', 'BEFORE', $this, 'handle_instructions');
         $controller->register_hook('TOOLBAR_DEFINE', 'AFTER', $this, 'handle_toolbar', array ());
         $controller->register_hook('HTML_SECEDIT_BUTTON', 'BEFORE', $this, 'handle_secedit_button');
+    }
+
+    /**
+     * Convert wrap_div's header calls to DokuWiki header calls
+     */
+    function handle_instructions(Doku_Event $event, $param) {
+        $instructions =& $event->data->calls;
+        foreach ($instructions as $k => &$ins) {
+            $call = ($ins[0] == 'plugin') ? 'plugin_'.$ins[1][0] : $ins[0];
+            switch ($call) {
+                case 'plugin_wrap_div':
+                    if ($ins[1][2] == 'header') {
+                        $ins[0] = 'header';
+                        $ins[1] = $ins[1][1];
+                    }
+                    break;
+            }
+        }
+        unset($ins);
     }
 
     function handle_toolbar(Doku_Event $event, $param) {

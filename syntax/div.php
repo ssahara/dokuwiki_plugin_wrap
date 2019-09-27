@@ -58,12 +58,14 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
                 // we have a == header ==, use the core header() renderer
                 // (copied from core header() in inc/parser/handler.php)
                 $title = trim($match);
-                $level = 7 - strspn($title,'=');
-                if($level < 1) $level = 1;
+                $level = 7 - min(strspn($title, '='), 6);
                 $title = trim($title,'=');
                 $title = trim($title);
 
-                $handler->_addCall('header',array($title,$level,$pos), $pos);
+                // write header without opening or closing section
+                $data = array($title, $level, $pos);
+                $handler->plugin($data, 'header', $pos, 'wrap_div');
+
                 // close the section edit the header could open
                 if ($title && $level <= $conf['maxseclevel']) {
                     $data = null;
@@ -76,6 +78,12 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
 
             case 'finishSectionEdit':
                 return array($state, '');
+
+            case 'header':
+                // $match is array set by handle called with DOKU_LEXER_MATCHED state.
+                // The plugin instruction must be converted to call header()
+                // during PARSER_HANDLER_DONE event handler.
+                return $data = (array)$match;
         }
         return false;
     }
