@@ -42,7 +42,7 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
     /**
      * Handle the match
      */
-    function handle($match, $state, $pos, Doku_Handler $handler){
+    function handle($match, $state, $pos, Doku_Handler $handler) {
         global $conf;
         switch ($state) {
             case DOKU_LEXER_ENTER:
@@ -51,7 +51,7 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
                 return array($state, $data);
 
             case DOKU_LEXER_UNMATCHED:
-                $handler->_addCall('cdata', array($match), $pos);
+                $handler->base($match, $state, $pos);
                 break;
 
             case DOKU_LEXER_MATCHED:
