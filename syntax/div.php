@@ -66,11 +66,15 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
                 $handler->_addCall('header',array($title,$level,$pos), $pos);
                 // close the section edit the header could open
                 if ($title && $level <= $conf['maxseclevel']) {
-                    $handler->addPluginCall('wrap_closesection', array(), DOKU_LEXER_SPECIAL, $pos, '');
+                    $data = null;
+                    $handler->plugin($data, 'finishSectionEdit', $pos, 'wrap_div');
                 }
                 break;
 
             case DOKU_LEXER_EXIT:
+                return array($state, '');
+
+            case 'finishSectionEdit':
                 return array($state, '');
         }
         return false;
@@ -114,6 +118,8 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
 
                 case DOKU_LEXER_EXIT:
                     $renderer->doc .= '</div>';
+
+                case 'finishSectionEdit':
                     $renderer->finishSectionEdit();
                     break;
             }
