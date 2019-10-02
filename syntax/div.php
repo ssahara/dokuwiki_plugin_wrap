@@ -115,6 +115,7 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
                     // from closing the last section edit so the next section button after the wrap syntax will
                     // include the whole wrap syntax
                     $renderer->startSectionEdit(0,  $sectionEditEndData);
+                    // no break
 
                 case DOKU_LEXER_SPECIAL:
                     $wrap = $this->loadHelper('wrap');
@@ -126,6 +127,7 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
 
                 case DOKU_LEXER_EXIT:
                     $renderer->doc .= '</div>';
+                    // no break;
 
                 case 'finishSectionEdit':
                     $renderer->finishSectionEdit();
