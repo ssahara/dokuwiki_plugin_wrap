@@ -34,7 +34,7 @@ class action_plugin_wrap extends DokuWiki_Action_Plugin {
             $call = ($ins[0] == 'plugin') ? 'plugin_'.$ins[1][0] : $ins[0];
             switch ($call) {
                 case 'plugin_wrap_div':
-                    if ($ins[1][2] == 'header') {
+                    if ($ins[1][2] == 'header1') {
                         $ins[0] = 'header';
                         $ins[1] = $ins[1][1];
                     }

@@ -64,7 +64,7 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
 
                 // write header without opening or closing section
                 $data = array($title, $level, $pos);
-                $handler->plugin($data, 'header', $pos, 'wrap_div');
+                $handler->plugin($data, 'header2', $pos, 'wrap_div');
 
                 // close the section edit the header could open
                 if ($title && $level <= $conf['maxseclevel']) {
@@ -79,11 +79,15 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
             case 'finishSectionEdit':
                 return array($state, '');
 
-            case 'header':
+            case 'header1':
                 // $match is array set by handle called with DOKU_LEXER_MATCHED state.
                 // The plugin instruction must be converted to call header()
                 // during PARSER_HANDLER_DONE event handler.
                 return $data = (array)$match;
+
+            case 'header2':
+                // emulated headers is to be rendered by render method of this plugin.
+                return array($state, $match);
         }
         return false;
     }
@@ -131,6 +135,11 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
 
                 case 'finishSectionEdit':
                     $renderer->finishSectionEdit();
+                    break;
+
+                case 'header2':
+                    list($text, $level, $pos) = $data;
+                    $renderer->header($text, $level, $pos);
                     break;
             }
             return true;
