@@ -64,7 +64,18 @@ class syntax_plugin_wrap_div extends DokuWiki_Syntax_Plugin {
 
                 // write header without opening or closing section
                 $data = array($title, $level, $pos);
-                $handler->plugin($data, 'header2', $pos, 'wrap_div');
+                
+                // method 0: use public _addCall(), but will be changed to protected addCall()
+             // $handler->_addCall('header', $data, $pos);
+                
+                // method 1: convert plugin call to DW header instruction
+             // $handler->plugin($data, 'header1', $pos, 'wrap_div');
+                
+                // method 2: render header later in render() stage
+             // $handler->plugin($data, 'header2', $pos, 'wrap_div');
+                
+                // method 3: direct write to calls array of handler class
+                $handler->calls[] = array('header', $data, $pos);
 
                 // close the section edit the header could open
                 if ($title && $level <= $conf['maxseclevel']) {
