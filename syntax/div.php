@@ -7,6 +7,7 @@
  */
 
 if(!defined('DOKU_INC')) die();
+require_once(DOKU_INC.'inc/Parsing/Lexer/Lexer.php');
 
 if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 require_once(DOKU_PLUGIN.'syntax.php');
